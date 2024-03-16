@@ -14,3 +14,5 @@ To run the project simply `gradle run`, to run tests: `gradle test`.
 ### What I like and do not like about my solution
 
 ### Which of the technologies or approaches were new to me
+
+* JUnit
