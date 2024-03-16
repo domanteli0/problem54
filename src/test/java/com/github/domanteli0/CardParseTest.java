@@ -1,25 +1,25 @@
 package com.github.domanteli0;
 
 import com.github.domanteli0.Card.*;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.common.ArgumentUtils;
 
 import java.util.stream.Stream;
 
+import static com.github.domanteli0.Card.Rank.*;
+import static com.github.domanteli0.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardParseTest {
 
     static Stream<Arguments> testData() {
         return Stream.of(
-            Arguments.of("5H", new Card(Rank._5, Suit.Heart)),
-            Arguments.of("QH", new Card(Rank.Queen, Suit.Heart)),
-            Arguments.of("TD", new Card(Rank._10, Suit.Diamond)),
-            Arguments.of("AC", new Card(Rank.Ace, Suit.Club))
+            Arguments.of("5H", new Card(_5, Heart)),
+            Arguments.of("QH", new Card(Queen, Heart)),
+            Arguments.of("TD", new Card(_10, Diamond)),
+            Arguments.of("AC", new Card(Ace, Club))
         );
     }
 

@@ -1,5 +1,6 @@
 | commit                     | time     |
 |----------------------------|----------|
+| implemented `Hand` parsing | ±30 mins |
 | implemented `Card` parsing | ±40 mins |
 | init                       | ±30 mins |
 

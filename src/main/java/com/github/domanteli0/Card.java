@@ -5,11 +5,13 @@ public record Card(Rank rank, Suit suit) {
 
     public enum Rank {_2, _3, _4, _5, _6, _7, _8, _9, _10, Jack, Queen, King, Ace}
 
+    // TODO: validate `input` length
     public static Card parse(String input) throws IllegalArgumentException {
         char first = input.charAt(0);
         char second = input.charAt(1);
 
         Card card = new Card(matchRank(first), matchSuit(second));
+
 
         return card;
     }
@@ -43,6 +45,7 @@ public record Card(Rank rank, Suit suit) {
         };
     }
 
+    // TODO: custom exception type
     private static String makeIllegalSuitMessage(char value) {
         return String.format(
             "Invalid character '%c' encountered, expected a character one of %s",
