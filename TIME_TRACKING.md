@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| implemented straights                   | ±30 mins              |
 | implemented flushes                     | ±70 mins              |
 | refactoring                             | ±60 mins (inaccurate) |
 | implemented full house                  | ±30 mins              |

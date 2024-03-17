@@ -119,13 +119,13 @@ class CompareTest {
     @Test
     void flush_LessThanFullHouse() {
         isLessThan(
-            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("KS 7S TS 9S 3S"),
             Hand.parse("AH AD AS KH KD")
         );
     }
 
     @Test
-    void flush_LessThanFlushWithOneCardEqual() {
+    void straight_LessThanStraight() {
         isLessThan(
             Hand.parse("KH 7H TH 9H 3H"),
             Hand.parse("KS 5S 7S 8S QS")
@@ -153,6 +153,22 @@ class CompareTest {
         isLessThan(
             Hand.parse("TD KD 7D 9D 3D"),
             Hand.parse("KH 7H 9H 3H QH")
+        );
+    }
+
+    @Test
+    void straight() {
+        isLessThan(
+            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("2C, 3H, 4H, 5S, 6D")
+        );
+    }
+
+    @Test
+    void straight_LessThanLowerStraight() {
+        isLessThan(
+            Hand.parse("2C, 3H, 4H, 5S, 6D"),
+            Hand.parse("7C, 3H, 4H, 5S, 6D")
         );
     }
 

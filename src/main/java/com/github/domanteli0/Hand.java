@@ -29,20 +29,29 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     public int compareTo(@NonNull Hand other) {
         return new RuleSet(
             Rule.define(
+                "Royal/Straight Flush",
                 Hand::isStraightFlush,
                 Hand::compareStraightFlushes
             ),
             Rule.define(
+                "Four-of-a-Kind",
                 Hand::isFourOfAKind,
                 Hand::compareFourOfAKind
             ),
             Rule.define(
+                "Full House",
                 Hand::isFullHouse,
                 Hand::compareFullHouse
             ),
             Rule.define(
+                "Flush",
                 Hand::isFlush,
                 Hand::comapareFlush
+            ),
+            Rule.define(
+                "Straight",
+                Hand::isStraight,
+                Hand::compareStraightFlushes
             )
         ).compare(this, other);
     }
@@ -168,26 +177,30 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     }
 
     private int compareStraightFlushes(Hand other) {
-        return Integer.compare(straightFlushRank(), other.straightFlushRank());
+        return Integer.compare(straightRank(), other.straightRank());
     }
 
-    private int straightFlushRank() {
+    private int straightRank() {
         return cards.stream()
             .map(Card::rank)
             .sorted()
             .toList().getLast().ordinal();
     }
 
-    private boolean isStraightFlush() {
+    private boolean isStraight() {
         var thisStream = cards.stream().map(Card::rank).sorted().toList();
 
         var royalFlushStream = Arrays.stream(values())
             .dropWhile(rank -> !rank.equals(thisStream.get(0)))
             .limit(5);
 
-        return isFlush() && Iterators.elementsEqual(
+        return Iterators.elementsEqual(
             thisStream.iterator(),
             royalFlushStream.iterator()
         );
+    }
+
+    private boolean isStraightFlush() {
+        return isFlush() && isStraight();
     }
 }
