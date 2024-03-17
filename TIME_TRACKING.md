@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| implement 3-of-a-kind                   | ±20 mins              |
 | implemented straights                   | ±30 mins              |
 | implemented flushes                     | ±70 mins              |
 | refactoring                             | ±60 mins (inaccurate) |

@@ -172,6 +172,39 @@ class CompareTest {
         );
     }
 
+    @Test
+    void threeOfAKind() {
+        isLessThan(
+            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("TH TC AC 8S TD")
+        );
+    }
+
+    @Test
+    void threeOfAKind_LessThanStraight() {
+        isLessThan(
+            Hand.parse("TH TC 3C KS TD"),
+            Hand.parse("2C, 3H, 4H, 5S, 6D")
+        );
+    }
+
+    @Test
+    void threeOfAKind_LessThan_HigherThreeOfAKind() {
+        isLessThan(
+            Hand.parse("3H 3C AD 7D 3D"),
+            Hand.parse("9H 9C KS 8C 9D")
+        );
+    }
+
+    @Test
+    void threeOfAKind_LessThan_EqualOfAKind() {
+        isLessThan(
+            Hand.parse("3H 3C AD 7D 3D"),
+            Hand.parse("3H 3C AD 8D 3D")
+        );
+
+    }
+
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
     // -- https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo-T-
     //

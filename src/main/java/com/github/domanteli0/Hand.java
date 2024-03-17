@@ -1,6 +1,9 @@
 package com.github.domanteli0;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Iterators;
@@ -35,8 +38,8 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
             ),
             Rule.define(
                 "Four-of-a-Kind",
-                Hand::isFourOfAKind,
-                Hand::compareFourOfAKind
+                Hand.isNOfAKind(4),
+                Hand.compareNOfAKind(4)
             ),
             Rule.define(
                 "Full House",
@@ -52,6 +55,11 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
                 "Straight",
                 Hand::isStraight,
                 Hand::compareStraightFlushes
+            ),
+            Rule.define(
+                "Three-of-a-kind",
+                Hand.isNOfAKind(3),
+                Hand.compareNOfAKind(3)
             )
         ).compare(this, other);
     }
@@ -133,47 +141,49 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
         }
     }
 
-    private int compareFourOfAKind(Hand other) {
-        var comp1 = fourOfAKindRank();
-        var comp2 = other.fourOfAKindRank();
+    private static BiFunction<Hand, Hand, Integer> compareNOfAKind(int n) {
+        return (left, right) -> {
+            var comp1 = NOfAKindRank(4).apply(left);
+            var comp2 = NOfAKindRank(4).apply(right);
 
-        if (Integer.compare(comp1, comp2) == 0) {
-            return Integer.compare(
-                cards.stream()
-                    .collect(groupingBy((card -> card.rank())))
-                    .values().stream()
-                    .filter((list) -> list.stream().count() != 4)
-                    .map((hand) -> hand.stream().map(card -> card.rank()))
-                    .findFirst().orElse(Stream.empty())
-                    .findFirst().map(r -> r.ordinal() + 1).orElse(0),
-                other.cards.stream()
-                    .collect(groupingBy((card -> card.rank())))
-                    .values().stream()
-                    .filter((list) -> list.stream().count() != 4)
-                    .map((hand) -> hand.stream().map(card -> card.rank()))
-                    .findFirst().orElse(Stream.empty())
-                    .findFirst().map(r -> r.ordinal() + 1).orElse(0)
-            );
-        }
+            if (Integer.compare(comp1, comp2) == 0) {
+                return Integer.compare(
+                    left.cards.stream()
+                        .collect(groupingBy(Card::rank))
+                        .values().stream()
+                        .filter((list) -> list.size() != n)
+                        .map((hand) -> hand.stream().map(Card::rank))
+                        .findFirst().orElse(Stream.empty())
+                        .findFirst().map(r -> r.ordinal() + 1).orElse(0),
+                    right.cards.stream()
+                        .collect(groupingBy(Card::rank))
+                        .values().stream()
+                        .filter((list) -> list.size() != n)
+                        .map((hand) -> hand.stream().map(Card::rank))
+                        .findFirst().orElse(Stream.empty())
+                        .findFirst().map(r -> r.ordinal() + 1).orElse(0)
+                );
+            }
 
-        return Integer.compare(comp1, comp2);
+            return Integer.compare(comp1, comp2);
+        };
     }
 
-    private boolean isFourOfAKind() {
-        return cards.stream()
+    private static Predicate<Hand> isNOfAKind(int n) {
+        return (self) -> self.cards.stream()
             .collect(groupingBy((Card::rank)))
             .values().stream()
-            .anyMatch((list) -> list.stream().count() == 4);
+            .anyMatch((list) -> (long) list.size() == n);
     }
 
-    private int fourOfAKindRank() {
-        return cards.stream()
-            .collect(groupingBy((card -> card.rank())))
+    private static Function<Hand, Integer> NOfAKindRank(int n) {
+        return (self) -> self.cards.stream()
+            .collect(groupingBy(Card::rank))
             .values().stream()
-            .filter((list) -> list.stream().count() == 4)
-            .map((hand) -> hand.stream().map(card -> card.rank()))
+            .filter((list) -> (long) list.size() == n)
+            .map((hand) -> hand.stream().map(Card::rank))
             .findFirst().orElse(Stream.empty())
-            .findFirst().map(r -> r.ordinal() + 5).orElse(0);
+            .findFirst().map(r -> r.ordinal() + n + 1).orElse(0);
     }
 
     private int compareStraightFlushes(Hand other) {
