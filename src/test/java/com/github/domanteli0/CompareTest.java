@@ -45,6 +45,38 @@ class CompareTest {
 
     }
 
+    @Test
+    void fourOfAKind() {
+        isLessThan(
+            Hand.parse("KS JH TS 9S QD"),
+            Hand.parse("9C 9S QH 9H, 9D")
+        );
+    }
+
+    @Test
+    void fourOfAKind_LessThanStraightFlush() {
+        isLessThan(
+            Hand.parse("9C 9S QH 9H 9D"),
+            Hand.parse("8H JH TH 9H QH")
+        );
+    }
+
+    @Test
+    void fourOfAKind_LessThanHigherKinkFourOfAKind() {
+        isLessThan(
+            Hand.parse("8C 8S QH 8H 8D"),
+            Hand.parse("9C 9S QH 9H 9D")
+        );
+    }
+
+    @Test
+    void fourOfAKind_LessThanEqualKinkFourOfAKindWithHigherRankLeftover() {
+        isLessThan(
+            Hand.parse("9C 9S TH 9H 9D"),
+            Hand.parse("9C 9S KD 9H 9D")
+        );
+    }
+
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
     // -- https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo-T-
     //

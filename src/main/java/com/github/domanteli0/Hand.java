@@ -5,6 +5,8 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.Iterators;
 
+import javax.naming.OperationNotSupportedException;
+
 import static com.github.domanteli0.Card.Rank.*;
 import static java.util.stream.Collectors.groupingBy;
 
@@ -26,7 +28,49 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
 
     @Override
     public int compareTo(Hand other) {
-        return compareStraightFlushes(other);
+        if (compareStraightFlushes(other) != 0) {
+            return compareStraightFlushes(other);
+        } else if (compareFourOfAKind(other) != 0) {
+            return compareFourOfAKind(other);
+        } else {
+            throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+        }
+    }
+
+    private int compareFourOfAKind(Hand other) {
+        var comp1 = fourOfAKindRank();
+        var comp2 = other.fourOfAKindRank();
+
+        if (Integer.compare(comp1, comp2) == 0) {
+            return Integer.compare(
+                cards.stream()
+                    .collect(groupingBy((card -> card.rank())))
+                    .values().stream()
+                    .filter((list) -> list.stream().count() != 4)
+                    .map((hand) -> hand.stream().map(card -> card.rank()))
+                    .findFirst().orElse(Stream.empty())
+                    .findFirst().map(r -> r.ordinal() + 1).orElse(0),
+                other.cards.stream()
+                    .collect(groupingBy((card -> card.rank())))
+                    .values().stream()
+                    .filter((list) -> list.stream().count() != 4)
+                    .map((hand) -> hand.stream().map(card -> card.rank()))
+                    .findFirst().orElse(Stream.empty())
+                    .findFirst().map(r -> r.ordinal() + 1).orElse(0)
+            );
+        }
+
+        return Integer.compare(comp1, comp2);
+    }
+
+    private int fourOfAKindRank() {
+        return cards.stream()
+            .collect(groupingBy((card -> card.rank())))
+            .values().stream()
+            .filter((list) -> list.stream().count() == 4)
+            .map((hand) -> hand.stream().map(card -> card.rank()))
+            .findFirst().orElse(Stream.empty())
+            .findFirst().map(r -> r.ordinal() + 5).orElse(0);
     }
 
     private int compareStraightFlushes(Hand other) {

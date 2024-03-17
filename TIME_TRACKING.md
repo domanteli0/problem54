@@ -1,5 +1,6 @@
 | commit                                  | time      |
 |-----------------------------------------|-----------|
+| implemented four of a kind              | ±30 mins  |
 | implement straight flush                | ±20 mins  |
 | implemented comparison of royal flushes | ±120 mins |
 | implemented `Hand` parsing              | ±30 mins  |
