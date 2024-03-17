@@ -15,4 +15,5 @@ To run the project simply `gradle run`, to run tests: `gradle test`.
 
 ### Which of the technologies or approaches were new to me
 
-* JUnit
+* JUnit & AssertJ
+* Java `Stream`s
