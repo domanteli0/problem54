@@ -14,7 +14,35 @@ class CompareTest {
 
     @Test
     public void royalFlushLookAlike() {
-        isLessThan(Hand.parse("KH JS TH AH QH"), Hand.parse("KH JH TH AH QH"));
+        isLessThan(
+            Hand.parse("KH JS TH AH QH"),
+            Hand.parse("KH JH TH AH QH")
+        );
+    }
+
+    @Test
+    void straightFlush() {
+        isLessThan(
+            Hand.parse("9C JH TH KH QH"),
+            Hand.parse("KS JS TS 9S QS")
+        );
+    }
+
+    @Test
+    void straightFlush_LessThanRoyalFlush() {
+        isLessThan(
+            Hand.parse("KH JH TH 9H QH"),
+            Hand.parse("KH JH TH AH QH")
+        );
+    }
+
+    @Test
+    void straightFlush_LessThanHigherRankStraightFlush() {
+        isLessThan(
+            Hand.parse("8H JH TH 9H QH"),
+            Hand.parse("KH JH TH 9H QH")
+        );
+
     }
 
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.

@@ -1,5 +1,6 @@
 | commit                                  | time      |
 |-----------------------------------------|-----------|
+| implement straight flush                | ±20 mins  |
 | implemented comparison of royal flushes | ±120 mins |
 | implemented `Hand` parsing              | ±30 mins  |
 | implemented `Card` parsing              | ±40 mins  |
