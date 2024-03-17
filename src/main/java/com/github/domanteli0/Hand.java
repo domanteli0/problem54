@@ -3,12 +3,8 @@ package com.github.domanteli0;
 import java.util.*;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Iterators;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.naming.OperationNotSupportedException;
-
-import static com.github.domanteli0.Card.Rank.*;
 import static java.util.stream.Collectors.groupingBy;
 
 public record Hand(List<Card> cards) implements Comparable<Hand> {
@@ -33,17 +29,59 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
             return compareStraightFlushes(other);
         } else if (compareFourOfAKind(other) != 0) {
             return compareFourOfAKind(other);
+        } else if (compareFullHouse(other) != 0) {
+            return compareFullHouse(other);
         } else {
             throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
         }
     }
 
     private int compareFullHouse(Hand other) {
-        throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+        var comp11 = this.threeOfAKindRank();
+        var comp12 = other.threeOfAKindRank();
+
+        if (Integer.compare(comp11, comp12) == 0 && this.isFullHouse() && other.isFullHouse()) {
+            return Integer.compare(this.pairRank(), other.pairRank());
+        } else {
+            return Integer.compare(comp11, comp12);
+        }
     }
 
-    private int fullHouseRank() {
-        throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+    private int pairRank() {
+        return cards.stream()
+            .collect(groupingBy((Card::rank)))
+            .values().stream()
+            .filter(list -> (long) list.size() == 2)
+            .map(hand -> hand.stream().map(Card::rank))
+            .findFirst().orElse(Stream.empty())
+            .findFirst().map(r -> r.ordinal() + 1).orElse(0);
+    }
+
+    private int threeOfAKindRank() {
+        return cards.stream()
+            .collect(groupingBy((Card::rank)))
+            .values().stream()
+            .filter(list -> (long) list.size() == 3)
+            .map(hand -> hand.stream().map(Card::rank))
+            .findFirst().orElse(Stream.empty())
+            .findFirst().map(r -> r.ordinal() + 1).orElse(0);
+    }
+
+    private boolean isFullHouse() {
+        var it = cards.stream()
+            .collect(groupingBy(Card::rank))
+            .values().stream().toList();
+
+        var i1 = it.get(0);
+        var i2 = it.get(1);
+
+        if (i1.size() == 2 && i2.size() == 3) {
+            return true;
+        } else if (i1.size() == 3 && i2.size() == 2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private int compareFourOfAKind(Hand other) {
