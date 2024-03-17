@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| implemented flushes                     | ±70 mins              |
 | refactoring                             | ±60 mins (inaccurate) |
 | implemented full house                  | ±30 mins              |
 | add tests for fullhouse + fix bug       | ±25 mins              |

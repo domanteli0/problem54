@@ -108,6 +108,54 @@ class CompareTest {
         );
     }
 
+    @Test
+    void flush() {
+        isLessThan(
+            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("KS 7S TS 9S 3S")
+        );
+    }
+
+    @Test
+    void flush_LessThanFullHouse() {
+        isLessThan(
+            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("AH AD AS KH KD")
+        );
+    }
+
+    @Test
+    void flush_LessThanFlushWithOneCardEqual() {
+        isLessThan(
+            Hand.parse("KH 7H TH 9H 3H"),
+            Hand.parse("KS 5S 7S 8S QS")
+        );
+    }
+
+    @Test
+    void flush_LessThanFlushWithFourCardsEqual_LowEnd() {
+        isLessThan(
+            Hand.parse("KS 7S TS 9S 2S"),
+            Hand.parse("KH 3H 7H TH 9H")
+        );
+    }
+
+    @Test
+    void flush_LessThanFlushWithFourCardsEqual_HighEnd() {
+        isLessThan(
+            Hand.parse("QC 7C TC 9C 3C"),
+            Hand.parse("KS 7S TS 9S 3S")
+        );
+    }
+
+    @Test
+    void flush_LessThanFlushWithFourCardsEqual_Middle() {
+        isLessThan(
+            Hand.parse("TD KD 7D 9D 3D"),
+            Hand.parse("KH 7H 9H 3H QH")
+        );
+    }
+
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
     // -- https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo-T-
     //

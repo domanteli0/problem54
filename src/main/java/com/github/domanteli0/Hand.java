@@ -3,8 +3,10 @@ package com.github.domanteli0;
 import java.util.*;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Iterators;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import static com.github.domanteli0.Card.Rank.*;
 import static java.util.stream.Collectors.groupingBy;
 
 public record Hand(List<Card> cards) implements Comparable<Hand> {
@@ -37,8 +39,41 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
             Rule.define(
                 Hand::isFullHouse,
                 Hand::compareFullHouse
+            ),
+            Rule.define(
+                Hand::isFlush,
+                Hand::comapareFlush
             )
         ).compare(this, other);
+    }
+
+    private int comapareFlush(Hand other) {
+        var leftIter = this.cards.stream().map(Card::rank).sorted(Comparator.reverseOrder()).iterator();
+        var rightIter = other.cards.stream().map(Card::rank).sorted(Comparator.reverseOrder()).iterator();
+
+
+        while (leftIter.hasNext()) {
+            Card.Rank left = leftIter.next();
+            Card.Rank right;
+            try {
+                right = rightIter.next();
+            } catch (NoSuchElementException e) {
+                throw new IllegalArgumentException("PROVIDED HANDS DO NOT HAVE EQUAL AMOUNT OF CARDS");
+            }
+
+            if (left.compareTo(right) != 0) {
+                return left.compareTo(right);
+            }
+        }
+
+        return 0;
+    }
+
+    private boolean isFlush() {
+        return cards.stream()
+            .collect(groupingBy((Card::suit)))
+            .values().stream()
+            .anyMatch((list) -> (long) list.size() == 5);
     }
 
     private int compareFullHouse(Hand other) {
@@ -144,12 +179,15 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     }
 
     private boolean isStraightFlush() {
-        return cards.stream()
-            .collect(groupingBy((Card::suit)))
-            .values().stream()
-            .filter((list) -> (long) list.size() == 5)
-            .map((hand) -> hand.stream().map(Card::rank))
-            .findFirst().orElse(Stream.empty())
-            .findFirst().isPresent();
+        var thisStream = cards.stream().map(Card::rank).sorted().toList();
+
+        var royalFlushStream = Arrays.stream(values())
+            .dropWhile(rank -> !rank.equals(thisStream.get(0)))
+            .limit(5);
+
+        return isFlush() && Iterators.elementsEqual(
+            thisStream.iterator(),
+            royalFlushStream.iterator()
+        );
     }
 }
