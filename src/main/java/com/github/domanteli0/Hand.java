@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Iterators;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -27,7 +28,7 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     }
 
     @Override
-    public int compareTo(Hand other) {
+    public int compareTo(@NonNull Hand other) {
         if (compareStraightFlushes(other) != 0) {
             return compareStraightFlushes(other);
         } else if (compareFourOfAKind(other) != 0) {
@@ -37,11 +38,19 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
         }
     }
 
+    private int compareFullHouse(Hand other) {
+        throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+    }
+
+    private int fullHouseRank() {
+        throw new UnsupportedOperationException("NOT YET IMPLEMENTED");
+    }
+
     private int compareFourOfAKind(Hand other) {
         var comp1 = fourOfAKindRank();
         var comp2 = other.fourOfAKindRank();
 
-        if (Integer.compare(comp1, comp2) == 0) {
+        if (Integer.compare(comp1, comp2) == 0 && isFourOfAKind() && other.isFourOfAKind()) {
             return Integer.compare(
                 cards.stream()
                     .collect(groupingBy((card -> card.rank())))
@@ -61,6 +70,13 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
         }
 
         return Integer.compare(comp1, comp2);
+    }
+
+    private boolean isFourOfAKind() {
+        return cards.stream()
+            .collect(groupingBy((Card::rank)))
+            .values().stream()
+            .anyMatch((list) -> list.stream().count() == 4);
     }
 
     private int fourOfAKindRank() {

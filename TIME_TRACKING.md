@@ -1,5 +1,6 @@
 | commit                                  | time      |
 |-----------------------------------------|-----------|
+| add tests for fullhouse + fix bug       | ±25 mins  |
 | implemented four of a kind              | ±30 mins  |
 | implement straight flush                | ±20 mins  |
 | implemented comparison of royal flushes | ±120 mins |

@@ -42,7 +42,6 @@ class CompareTest {
             Hand.parse("8H JH TH 9H QH"),
             Hand.parse("KH JH TH 9H QH")
         );
-
     }
 
     @Test
@@ -77,6 +76,38 @@ class CompareTest {
         );
     }
 
+    @Test
+    void fullHouse() {
+        isLessThan(
+            Hand.parse("KS 7H TS 9C 3D"),
+            Hand.parse("AH AD AS KH KD")
+        );
+    }
+
+    @Test
+    void fullHouse_LessThanFourOfAKind() {
+        isLessThan(
+            Hand.parse("AH AD AS KH KD"),
+            Hand.parse("9C 9S KD 9H 9D")
+        );
+    }
+
+    @Test
+    void fullHouse_LessThanFullHouseWithHigherThreeOfAKind() {
+        isLessThan(
+            Hand.parse("9H 9D 9S KH KD"),
+            Hand.parse("KH KD KS AH AD")
+        );
+    }
+
+    @Test
+    void fullHouse_LessThanFullHouseWithHigherPair() {
+        isLessThan(
+            Hand.parse("9H 9D 9S QH QD"),
+            Hand.parse("9H 9D 9S KH KD")
+        );
+    }
+
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
     // -- https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo-T-
     //
@@ -89,14 +120,14 @@ class CompareTest {
     private static Condition<Hand> greaterThan(Hand hand) {
         return new Condition<Hand>(
             (other) -> other.compareTo(hand) > 0,
-            String.format("left > right")
+            "left > right"
         );
     }
 
     private static Condition<Hand> lessThan(Hand hand) {
         return new Condition<Hand>(
             (other) -> other.compareTo(hand) < 0,
-            String.format("left < right")
+            "left < right"
         );
     }
 
