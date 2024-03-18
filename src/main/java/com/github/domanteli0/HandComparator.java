@@ -5,7 +5,6 @@ import com.google.common.collect.Streams;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,8 +69,9 @@ public class HandComparator implements Comparator<Hand> {
     private static int straightRank(Hand hand) {
         return hand.cards().stream()
             .map(Card::rank)
-            .sorted(Comparator.reverseOrder())
-            .findFirst().get().ordinal();
+            .max(Comparator.naturalOrder())
+            .orElseThrow(() -> new IllegalArgumentException("EMPTY HAND"))
+            .ordinal();
     }
 
     private static int compareFlush(Hand left, Hand right) {
@@ -102,33 +102,36 @@ public class HandComparator implements Comparator<Hand> {
         if (left.size() != right.size())
             throw new IllegalArgumentException("PROVIDED HANDS DO NOT HAVE EQUAL AMOUNT OF CARDS");
 
+
+        @SuppressWarnings("UnstableApiUsage")
         var comparisons = Streams.zip(
             left.stream(),
             right.stream(),
-            (l, r) -> l.compareTo(r)
+            Card.Rank::compareTo
         );
 
         return comparisons.filter(c -> c != 0).findFirst().orElse(0);
     }
 
     private static Stream<Card.Rank> getPairsAndLeftoversInOrder(Hand hand, int pairSize) {
-        var iter = hand.cards().stream()
+        var split = hand.cards().stream()
             .collect(groupingBy(Card::rank))
             .values().stream()
             .collect(Collectors.partitioningBy(l -> l.size() == pairSize));
 
-        var pairs = iter.get(true).stream()
+        var pairs = split.get(true).stream()
             .map(List::getFirst)
             .map(Card::rank)
             .sorted(Comparator.reverseOrder());
 
-        var leftovers = iter.get(false).stream()
+        var leftovers = split.get(false).stream()
             .flatMap(l -> l.stream().map(Card::rank))
             .sorted(Comparator.reverseOrder());
 
         return Streams.concat(pairs, leftovers);
     }
 
+    @SuppressWarnings("java:S3400")
     private static boolean always(Hand hand) {
         return true;
     }

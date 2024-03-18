@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CompareTest {
     @Test
-    public void royalFlush() {
+    void royalFlush() {
         isLessThan(
             Hand.parse("KH JS 8H AH QH"),
             Hand.parse("KH JH TH AH QH")
@@ -18,7 +18,7 @@ class CompareTest {
     }
 
     @Test
-    public void royalFlushLookAlike() {
+    void royalFlushLookAlike() {
         isLessThan(
             Hand.parse("KH JS TH AH QH"),
             Hand.parse("KH JH TH AH QH")
@@ -34,7 +34,7 @@ class CompareTest {
     }
 
     @Test
-    void straightFlush_LessThanRoyalFlush() {
+    void straightFlush_LessThan_RoyalFlush() {
         isLessThan(
             Hand.parse("KH JH TH 9H QH"),
             Hand.parse("KH JH TH AH QH")
@@ -42,7 +42,7 @@ class CompareTest {
     }
 
     @Test
-    void straightFlush_LessThanHigherRankStraightFlush() {
+    void straightFlush_LessThan_HigherRankStraightFlush() {
         isLessThan(
             Hand.parse("8H JH TH 9H QH"),
             Hand.parse("KH JH TH 9H QH")
@@ -58,7 +58,7 @@ class CompareTest {
     }
 
     @Test
-    void fourOfAKind_LessThanStraightFlush() {
+    void fourOfAKind_LessThan_StraightFlush() {
         isLessThan(
             Hand.parse("9C 9S QH 9H 9D"),
             Hand.parse("8H JH TH 9H QH")
@@ -66,7 +66,7 @@ class CompareTest {
     }
 
     @Test
-    void fourOfAKind_LessThanHigherKinkFourOfAKind() {
+    void fourOfAKind_LessThan_HigherKinkFourOfAKind() {
         isLessThan(
             Hand.parse("8C 8S QH 8H 8D"),
             Hand.parse("9C 9S QH 9H 9D")
@@ -74,7 +74,7 @@ class CompareTest {
     }
 
     @Test
-    void fourOfAKind_LessThanEqualKinkFourOfAKindWithHigherRankLeftover() {
+    void fourOfAKind_LessThan_EqualKinkFourOfAKindWithHigherRankLeftover() {
         isLessThan(
             Hand.parse("9C 9S TH 9H 9D"),
             Hand.parse("9C 9S KD 9H 9D")
@@ -90,7 +90,7 @@ class CompareTest {
     }
 
     @Test
-    void fullHouse_LessThanFourOfAKind() {
+    void fullHouse_LessThan_FourOfAKind() {
         isLessThan(
             Hand.parse("AH AD AS KH KD"),
             Hand.parse("9C 9S KD 9H 9D")
@@ -98,7 +98,7 @@ class CompareTest {
     }
 
     @Test
-    void fullHouse_LessThanFullHouseWithHigherThreeOfAKind() {
+    void fullHouse_LessThan_FullHouseWithHigherThreeOfAKind() {
         isLessThan(
             Hand.parse("9H 9D 9S KH KD"),
             Hand.parse("KH KD KS AH AD")
@@ -106,7 +106,7 @@ class CompareTest {
     }
 
     @Test
-    void fullHouse_LessThanFullHouseWithHigherPair() {
+    void fullHouse_LessThan_FullHouseWithHigherPair() {
         isLessThan(
             Hand.parse("9H 9D 9S QH QD"),
             Hand.parse("9H 9D 9S KH KD")
@@ -122,7 +122,7 @@ class CompareTest {
     }
 
     @Test
-    void flush_LessThanFullHouse() {
+    void flush_LessThan_FullHouse() {
         isLessThan(
             Hand.parse("KS 7S TS 9S 3S"),
             Hand.parse("AH AD AS KH KD")
@@ -130,7 +130,7 @@ class CompareTest {
     }
 
     @Test
-    void straight_LessThanStraight() {
+    void straight_LessThan_Straight() {
         isLessThan(
             Hand.parse("KH 7H TH 9H 3H"),
             Hand.parse("KS 5S 7S 8S QS")
@@ -138,7 +138,7 @@ class CompareTest {
     }
 
     @Test
-    void flush_LessThanFlushWithFourCardsEqual_LowEnd() {
+    void flush_LessThan_FlushWithFourCardsEqual_LowEnd() {
         isLessThan(
             Hand.parse("KS 7S TS 9S 2S"),
             Hand.parse("KH 3H 7H TH 9H")
@@ -146,7 +146,7 @@ class CompareTest {
     }
 
     @Test
-    void flush_LessThanFlushWithFourCardsEqual_HighEnd() {
+    void flush_LessThan_FlushWithFourCardsEqual_HighEnd() {
         isLessThan(
             Hand.parse("QC 7C TC 9C 3C"),
             Hand.parse("KS 7S TS 9S 3S")
@@ -154,7 +154,7 @@ class CompareTest {
     }
 
     @Test
-    void flush_LessThanFlushWithFourCardsEqual_Middle() {
+    void flush_LessThan_FlushWithFourCardsEqual_Middle() {
         isLessThan(
             Hand.parse("TD KD 7D 9D 3D"),
             Hand.parse("KH 7H 9H 3H QH")
@@ -170,7 +170,7 @@ class CompareTest {
     }
 
     @Test
-    void straight_LessThanLowerStraight() {
+    void straight_LessThan_LowerStraight() {
         isLessThan(
             Hand.parse("2C, 3H, 4H, 5S, 6D"),
             Hand.parse("7C, 3H, 4H, 5S, 6D")
@@ -186,7 +186,7 @@ class CompareTest {
     }
 
     @Test
-    void threeOfAKind_LessThanStraight() {
+    void threeOfAKind_LessThan_Straight() {
         isLessThan(
             Hand.parse("TH TC 3C KS TD"),
             Hand.parse("2C, 3H, 4H, 5S, 6D")
@@ -291,7 +291,7 @@ class CompareTest {
     }
 
     @Test
-    public void providedTestCase1() {
+    void providedTestCase1() {
         isLessThan(
             Hand.parse("5H 5C 6S 7S KD"),
             Hand.parse("2C 3S 8S 8D TD")
@@ -299,7 +299,7 @@ class CompareTest {
     }
 
     @Test
-    public void providedTestCase2() {
+    void providedTestCase2() {
         isGreaterThan(
             Hand.parse("5D 8C 9S JS AC"),
             Hand.parse("2C 5C 7D 8S QH")
@@ -307,7 +307,7 @@ class CompareTest {
     }
 
     @Test
-    public void providedTestCase3() {
+    void providedTestCase3() {
         isLessThan(
             Hand.parse("2D 9C AS AH AC"),
             Hand.parse("3D 6D 7D TD QD")
@@ -315,7 +315,7 @@ class CompareTest {
     }
 
     @Test
-    public void providedTestCase4() {
+    void providedTestCase4() {
         isGreaterThan(
             Hand.parse("4D 6S 9H QH QC"),
             Hand.parse("3D 6D 7H QD QS")
@@ -323,7 +323,7 @@ class CompareTest {
     }
 
     @Test
-    public void providedTestCase5() {
+    void providedTestCase5() {
         isGreaterThan(
             Hand.parse("2H 2D 4C 4D 4S"),
             Hand.parse("3C 3D 3S 9S 9D")
@@ -331,7 +331,7 @@ class CompareTest {
     }
 
     @Test
-    public void calculateFirstPlayerWinsFromFile() throws IOException {
+    void calculateFirstPlayerWinsFromFile() throws IOException {
         assertThat(
             Main.calculateFirstPlayerWinsFromFile("poker_short.txt")
         ).isEqualTo(3);
@@ -355,7 +355,7 @@ class CompareTest {
 
     private static Condition<Hand> greaterThan(Hand right) {
         var comparator = new HandComparator();
-        return new Condition<Hand>(
+        return new Condition<>(
             (left) -> comparator.compare(left, right) > 0,
             "left > right"
         );
@@ -363,7 +363,7 @@ class CompareTest {
 
     private static Condition<Hand> lessThan(Hand right) {
         var comparator = new HandComparator();
-        return new Condition<Hand>(
+        return new Condition<>(
             (left) -> comparator.compare(left, right) < 0,
             "left < right"
         );

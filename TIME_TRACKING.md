@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| fix most linter warnings                | ±25 mins              |
 | more refactoring                        | ±110 mins             |
 | refactoring                             | ±20 mins              |
 | add main                                | ±30 mins              |

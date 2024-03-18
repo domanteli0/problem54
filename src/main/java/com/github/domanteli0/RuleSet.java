@@ -9,9 +9,9 @@ record RuleSet(Rule... rules) {
 
             if (leftCheck && rightCheck) {
                 return rule.compare(left, right);
-            } else if (leftCheck && !rightCheck) {
+            } else if (leftCheck) {
                 return 1;
-            } else if (!leftCheck && rightCheck) {
+            } else if (rightCheck) {
                 return -1;
             }
         }

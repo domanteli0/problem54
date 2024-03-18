@@ -1,10 +1,10 @@
 package com.github.domanteli0;
 
-import java.util.stream.Stream;
-
 public record Card(Rank rank, Suit suit) {
+    @SuppressWarnings("java:S115") // Naming
     public enum Suit {Spade, Club, Diamond, Heart}
 
+    @SuppressWarnings("java:S115") // Naming
     public enum Rank {_2, _3, _4, _5, _6, _7, _8, _9, _10, Jack, Queen, King, Ace}
 
     // TODO: validate `input` length
@@ -12,9 +12,7 @@ public record Card(Rank rank, Suit suit) {
         char first = input.charAt(0);
         char second = input.charAt(1);
 
-        Card card = new Card(matchRank(first), matchSuit(second));
-
-        return card;
+        return new Card(matchRank(first), matchSuit(second));
     }
 
     private static Suit matchSuit(char value) {

@@ -6,11 +6,12 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class Main {
+    @SuppressWarnings("java:S106") // Use logger
     public static void main(String[] args) throws IOException {
-        System.out.println(String.format(
+        System.out.printf(
             "First player won %s times",
             calculateFirstPlayerWinsFromFile(args[0])
-        ));
+        );
     }
 
     public static int calculateFirstPlayerWinsFromFile(String filePath) throws IOException {
@@ -26,7 +27,7 @@ public class Main {
                     var rightHand = Hand.parse(rightStr);
                     return (comparator.compare(leftHand, rightHand) < 0) ? 0 : 1;
                 }
-            ).reduce(0, (a, b) -> a + b);
+            ).reduce(0, Integer::sum);
         }
     }
 }
