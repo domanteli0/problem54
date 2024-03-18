@@ -353,16 +353,18 @@ class CompareTest {
         assertThat(right).is(lessThan(left));
     }
 
-    private static Condition<Hand> greaterThan(Hand hand) {
+    private static Condition<Hand> greaterThan(Hand right) {
+        var comparator = new HandComparator();
         return new Condition<Hand>(
-            (other) -> other.compareTo(hand) > 0,
+            (left) -> comparator.compare(left, right) > 0,
             "left > right"
         );
     }
 
-    private static Condition<Hand> lessThan(Hand hand) {
+    private static Condition<Hand> lessThan(Hand right) {
+        var comparator = new HandComparator();
         return new Condition<Hand>(
-            (other) -> other.compareTo(hand) < 0,
+            (left) -> comparator.compare(left, right) < 0,
             "left < right"
         );
     }

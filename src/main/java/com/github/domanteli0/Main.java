@@ -14,6 +14,8 @@ public class Main {
     }
 
     public static int calculateFirstPlayerWinsFromFile(String filePath) throws IOException {
+        var comparator = new HandComparator();
+
         try (Stream<String> stream = Files.lines(Paths.get(filePath))) {
             return stream.map(
                 line -> {
@@ -22,7 +24,7 @@ public class Main {
 
                     var leftHand = Hand.parse(leftStr);
                     var rightHand = Hand.parse(rightStr);
-                    return (leftHand.compareTo(rightHand) < 0) ? 0 : 1;
+                    return (comparator.compare(leftHand, rightHand) < 0) ? 0 : 1;
                 }
             ).reduce(0, (a, b) -> a + b);
         }
