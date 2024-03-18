@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| implemented rest of the rules           | ±120 mins             |
 | implement 3-of-a-kind                   | ±20 mins              |
 | implemented straights                   | ±30 mins              |
 | implemented flushes                     | ±70 mins              |

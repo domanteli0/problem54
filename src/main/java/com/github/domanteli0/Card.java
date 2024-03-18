@@ -1,5 +1,7 @@
 package com.github.domanteli0;
 
+import java.util.stream.Stream;
+
 public record Card(Rank rank, Suit suit) {
     public enum Suit {Spade, Club, Diamond, Heart}
 
@@ -11,7 +13,6 @@ public record Card(Rank rank, Suit suit) {
         char second = input.charAt(1);
 
         Card card = new Card(matchRank(first), matchSuit(second));
-
 
         return card;
     }

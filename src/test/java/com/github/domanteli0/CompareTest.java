@@ -197,13 +197,95 @@ class CompareTest {
     }
 
     @Test
-    void threeOfAKind_LessThan_EqualOfAKind() {
+    void threeOfAKind_LessThan_EqualThreeOfAKind() {
         isLessThan(
             Hand.parse("3H 3C AD 7D 3D"),
             Hand.parse("3H 3C AD 8D 3D")
         );
 
     }
+
+    @Test
+    void twoPair_LessThan_ThreeOfAKind() {
+        isLessThan(
+            Hand.parse("6S 6D QC QH 3D"),
+            Hand.parse("2C, 3H, 4H, 5S, 6D")
+        );
+    }
+
+    @Test
+    void twoPair_LessThan_HigherTwoPair1() {
+        isLessThan(
+            Hand.parse("6S 6D QC QH 3D"),
+            Hand.parse("7S 7D QC QH 3D")
+        );
+    }
+
+    @Test
+    void twoPair_LessThan_HigherTwoPair2() {
+        isLessThan(
+            Hand.parse("7S 7D QC QH 3D"),
+            Hand.parse("7S 7D KC KH 3D")
+        );
+    }
+
+    @Test
+    void twoPair_LessThan_EqualTwoPair() {
+        isLessThan(
+            Hand.parse("7S 7D KC KH 3D"),
+            Hand.parse("7S 7D KC KH 4D")
+        );
+    }
+
+    @Test
+    void onePair_LessThan_twoPair() {
+        isLessThan(
+            Hand.parse("5S 3H 3C 7D 9C"),
+            Hand.parse("6S 6D QC QH 3D")
+        );
+    }
+
+    @Test
+    void onePair_LessThan_HigherOnePair() {
+        isLessThan(
+            Hand.parse("5S 3H 3C 7D 9C"),
+            Hand.parse("5S 7D 8H 8C 9S")
+        );
+    }
+
+    @Test
+    void onePair_LessThan_EqualOnePair() {
+        isLessThan(
+            Hand.parse("5S 3H 3C 7D 9C"),
+            Hand.parse("6S 3C 7D 9C 3H")
+        );
+    }
+
+    @Test
+    void highCard_LessThan_onePair() {
+        isLessThan(
+            Hand.parse("KD, 7S 4S 3H JC"),
+            Hand.parse("5S 3H 3C 7D 9C")
+        );
+    }
+
+    @Test
+    void highCard_LessThan_highCard1() {
+        isLessThan(
+            Hand.parse("QD, 7S 4S 3H JC"),
+            Hand.parse("KD, 7S 4S 3H JC")
+        );
+    }
+
+    @Test
+    void highCard_LessThan_highCard2() {
+        isLessThan(
+            Hand.parse("QD, 7S 4S 2H JC"),
+            Hand.parse("QD, 7S 4S 3H JC")
+        );
+    }
+
+    // TODO: Test with random card order
 
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
     // -- https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html#compareTo-T-
