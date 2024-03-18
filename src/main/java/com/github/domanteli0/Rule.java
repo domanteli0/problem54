@@ -3,6 +3,12 @@ package com.github.domanteli0;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+/**
+ * Uses {@link #check(Hand hand)} method to see if a Rule applies to a given {@link com.github.domanteli0.Hand}.
+ * <br>
+ * If both {@link com.github.domanteli0.Hand}s pass the check {@link #compare(Hand, Hand)} can be used to see which one
+ * is of a higher value.
+ */
 public interface Rule {
     static Rule define(String ruleName, Predicate<Hand> check, BiFunction<Hand, Hand, Integer> compare) {
         return new Rule() {

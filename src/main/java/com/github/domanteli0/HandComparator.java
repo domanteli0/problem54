@@ -57,7 +57,7 @@ public class HandComparator implements Comparator<Hand> {
             Rule.define(
                 "High Card",
                 HandComparator::always,
-                HandComparator::compareHighRanks
+                HandComparator::compareByEachUnordered
             )
         ).compare(left, right);
     }
@@ -75,33 +75,32 @@ public class HandComparator implements Comparator<Hand> {
     }
 
     private static int compareFlush(Hand left, Hand right) {
-        return compareHighRanks(
+        return compareByEachUnordered(
             left.cards().stream().map(Card::rank).sorted(Comparator.reverseOrder()),
             right.cards().stream().map(Card::rank).sorted(Comparator.reverseOrder())
         );
     }
 
     private static BiFunction<Hand, Hand, Integer> compareNOfAKind(int n) {
-        return (left, right) -> compareHighRanks(
+        return (left, right) -> compareByEachUnordered(
             getPairsAndLeftoversInOrder(left, n),
             getPairsAndLeftoversInOrder(right, n)
         );
     }
 
-    private static int compareHighRanks(Hand left, Hand right) {
-        return compareHighRanks(
+    private static int compareByEachUnordered(Hand left, Hand right) {
+        return compareByEachUnordered(
             left.toRanks().sorted(Comparator.reverseOrder()),
             right.toRanks().sorted(Comparator.reverseOrder())
         );
     }
 
-    private static int compareHighRanks(Stream<Card.Rank> leftRanks, Stream<Card.Rank> rightRanks) {
+    private static int compareByEachUnordered(Stream<Card.Rank> leftRanks, Stream<Card.Rank> rightRanks) {
         var left = leftRanks.toList();
         var right = rightRanks.toList();
 
         if (left.size() != right.size())
             throw new IllegalArgumentException("PROVIDED HANDS DO NOT HAVE EQUAL AMOUNT OF CARDS");
-
 
         @SuppressWarnings("UnstableApiUsage")
         var comparisons = Streams.zip(
