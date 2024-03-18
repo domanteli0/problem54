@@ -1,5 +1,6 @@
 | commit                                  | time                  |
 |-----------------------------------------|-----------------------|
+| refactoring                             | ±20 mins              |
 | add main                                | ±30 mins              |
 | implemented rest of the rules           | ±120 mins             |
 | implement 3-of-a-kind                   | ±20 mins              |

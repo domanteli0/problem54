@@ -68,12 +68,12 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
             ),
             Rule.define(
                 "Two Pair",
-                Hand::isTwoPair,
+                Hand.isNPair(2),
                 Hand::compareTwoPair
             ),
             Rule.define(
                 "One Pair",
-                Hand::isOnePair,
+                Hand.isNPair(1),
                 Hand::compareOnePair
             ),
             Rule.define(
@@ -89,51 +89,36 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     }
 
     private static int compareHighRanks(Stream<Card.Rank> leftRanks, Stream<Card.Rank> rightRanks) {
+        var left = leftRanks.toList();
+        var right = rightRanks.toList();
+
+        if (left.size() != right.size())
+            throw new IllegalArgumentException("PROVIDED HANDS DO NOT HAVE EQUAL AMOUNT OF CARDS");
+
         var comparisons = Streams.zip(
-            leftRanks.sorted(Comparator.reverseOrder()),
-            rightRanks.sorted(Comparator.reverseOrder()),
+            left.stream().sorted(Comparator.reverseOrder()),
+            right.stream().sorted(Comparator.reverseOrder()),
             (l, r) -> l.compareTo(r)
         );
 
         return comparisons.filter(c -> c != 0).findFirst().orElse(0);
     }
 
-
     private int comapareFlush(Hand other) {
-        var leftIter = this.cards.stream().map(Card::rank).sorted(Comparator.reverseOrder()).iterator();
-        var rightIter = other.cards.stream().map(Card::rank).sorted(Comparator.reverseOrder()).iterator();
-
-
-        while (leftIter.hasNext()) {
-            Card.Rank left = leftIter.next();
-            Card.Rank right;
-            try {
-                right = rightIter.next();
-            } catch (NoSuchElementException e) {
-                throw new IllegalArgumentException("PROVIDED HANDS DO NOT HAVE EQUAL AMOUNT OF CARDS");
-            }
-
-            if (left.compareTo(right) != 0) {
-                return left.compareTo(right);
-            }
-        }
-
-        return 0;
+        return compareHighRanks(
+            this.cards().stream().map(Card::rank),
+            other.cards().stream().map(Card::rank)
+        );
     }
 
-    private boolean isTwoPair() {
-        var iter = this.cards.stream()
+    private static Predicate<Hand> isNPair(int n) {
+        return (self) -> self.cards.stream()
             .collect(groupingBy(Card::rank))
             .values().stream()
-            .filter(list -> list.size() == 2).iterator();
-
-        if (!iter.hasNext()) {
-            return false;
-        }
-
-        iter.next();
-        return iter.hasNext();
+            .filter(list -> list.size() == 2)
+            .count() == n;
     }
+
 
     private int compareTwoPair(Hand other) {
         var leftIter = this.cards.stream()
@@ -215,16 +200,6 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
         return pair1.rank().compareTo(pair2.rank());
     }
 
-    private boolean isOnePair() {
-        var iter = this.cards.stream()
-            .collect(groupingBy(Card::rank))
-            .values().stream()
-            .filter(list -> list.size() == 2).iterator();
-
-        boolean var = iter.hasNext();
-        return var;
-    }
-
     private boolean isFlush() {
         return cards.stream()
             .collect(groupingBy((Card::suit)))
@@ -233,8 +208,8 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
     }
 
     private int compareFullHouse(Hand other) {
-        var comp11 = this.threeOfAKindRank();
-        var comp12 = other.threeOfAKindRank();
+        var comp11 = NOfAKindRank(3).apply(this);
+        var comp12 = NOfAKindRank(3).apply(other);
 
         if (Integer.compare(comp11, comp12) == 0) {
             return Integer.compare(this.pairRank(), other.pairRank());
@@ -253,31 +228,8 @@ public record Hand(List<Card> cards) implements Comparable<Hand> {
             .findFirst().map(r -> r.ordinal() + 1).orElse(0);
     }
 
-    private int threeOfAKindRank() {
-        return cards.stream()
-            .collect(groupingBy((Card::rank)))
-            .values().stream()
-            .filter(list -> (long) list.size() == 3)
-            .map(hand -> hand.stream().map(Card::rank))
-            .findFirst().orElse(Stream.empty())
-            .findFirst().map(r -> r.ordinal() + 1).orElse(0);
-    }
-
     private boolean isFullHouse() {
-        var it = cards.stream()
-            .collect(groupingBy(Card::rank))
-            .values().stream().toList();
-
-        var i1 = it.get(0);
-        var i2 = it.get(1);
-
-        if (i1.size() == 2 && i2.size() == 3) {
-            return true;
-        } else if (i1.size() == 3 && i2.size() == 2) {
-            return true;
-        } else {
-            return false;
-        }
+        return isNOfAKind(3).test(this) && isNOfAKind(2).test(this);
     }
 
     private static BiFunction<Hand, Hand, Integer> compareNOfAKind(int n) {
