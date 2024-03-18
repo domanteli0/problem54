@@ -4,12 +4,17 @@ import org.junit.jupiter.api.Test;
 
 import org.assertj.core.api.*;
 
+import java.io.IOException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CompareTest {
     @Test
     public void royalFlush() {
-        isLessThan(Hand.parse("KH JS 8H AH QH"), Hand.parse("KH JH TH AH QH"));
+        isLessThan(
+            Hand.parse("KH JS 8H AH QH"),
+            Hand.parse("KH JH TH AH QH")
+        );
     }
 
     @Test
@@ -285,6 +290,53 @@ class CompareTest {
         );
     }
 
+    @Test
+    public void providedTestCase1() {
+        isLessThan(
+            Hand.parse("5H 5C 6S 7S KD"),
+            Hand.parse("2C 3S 8S 8D TD")
+        );
+    }
+
+    @Test
+    public void providedTestCase2() {
+        isGreaterThan(
+            Hand.parse("5D 8C 9S JS AC"),
+            Hand.parse("2C 5C 7D 8S QH")
+        );
+    }
+
+    @Test
+    public void providedTestCase3() {
+        isLessThan(
+            Hand.parse("2D 9C AS AH AC"),
+            Hand.parse("3D 6D 7D TD QD")
+        );
+    }
+
+    @Test
+    public void providedTestCase4() {
+        isGreaterThan(
+            Hand.parse("4D 6S 9H QH QC"),
+            Hand.parse("3D 6D 7H QD QS")
+        );
+    }
+
+    @Test
+    public void providedTestCase5() {
+        isGreaterThan(
+            Hand.parse("2H 2D 4C 4D 4S"),
+            Hand.parse("3C 3D 3S 9S 9D")
+        );
+    }
+
+    @Test
+    public void calculateFirstPlayerWinsFromFile() throws IOException {
+        assertThat(
+            Main.calculateFirstPlayerWinsFromFile("poker_short.txt")
+        ).isEqualTo(3);
+    }
+
     // TODO: Test with random card order
 
     // > The implementor must ensure sgn(x.compareTo(y)) == -sgn(y.compareTo(x)) for all x and y.
@@ -294,6 +346,11 @@ class CompareTest {
     private static void isLessThan(Hand left, Hand right) {
         assertThat(left).is(lessThan(right));
         assertThat(right).is(greaterThan(left));
+    }
+
+    private static void isGreaterThan(Hand left, Hand right) {
+        assertThat(left).is(greaterThan(right));
+        assertThat(right).is(lessThan(left));
     }
 
     private static Condition<Hand> greaterThan(Hand hand) {

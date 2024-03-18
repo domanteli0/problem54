@@ -5,7 +5,7 @@ Solution of [Project Euler's 54th](https://projecteuler.net/problem=54) problem 
 ## Building
 
 This project uses `gradle` as it's build tool.
-To run the project simply `gradle run`, to run tests: `gradle test`.
+To run the project simply `gradle run --args='poker.txt'`, to run tests: `gradle test`.
 
 ## About the project
 
