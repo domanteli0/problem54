@@ -57,7 +57,7 @@ public class HandComparator implements Comparator<Hand> {
             Rule.define(
                 "High Card",
                 HandComparator::always,
-                HandComparator::compareByEachUnordered
+                HandComparator::compareByEach
             )
         ).compare(left, right);
     }
@@ -88,7 +88,7 @@ public class HandComparator implements Comparator<Hand> {
         );
     }
 
-    private static int compareByEachUnordered(Hand left, Hand right) {
+    private static int compareByEach(Hand left, Hand right) {
         return compareByEachUnordered(
             left.toRanks().sorted(Comparator.reverseOrder()),
             right.toRanks().sorted(Comparator.reverseOrder())
