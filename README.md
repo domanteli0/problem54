@@ -1,6 +1,6 @@
 # problem54
 
-Solution of [Project Euler's 54th](https://projecteuler.net/problem=54) problem using Java.
+Solution of [Project Euler's 54th](https://projecteuler.net/problem=54) problem using Java. Based on [these](https://www.pokernews.com/poker-hands.htm) rules.
 
 ## Building
 
